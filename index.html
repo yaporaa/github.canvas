@@ -1,161 +1,392 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Neptune | Experience the Deep</title>
-<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='25' fill='none' stroke='%2300E5FF' stroke-width='6'/%3E%3Cellipse cx='50' cy='50' rx='40' ry='12' fill='none' stroke='%2300E5FF' stroke-width='4' transform='rotate(-30 50 50)'/%3E%3Ctext x='50' y='58' font-size='24' font-weight='bold' fill='white' text-anchor='middle'%3EN%3C/text%3E%3C/svg%3E">
-<link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
-<style>
-:root{--bg-base:#050505;--bg-surface:#0f0f0f;--bg-card:#1a1a1a;--bg-panel:rgba(10,10,12,.94);--accent:#00E5FF;--accent-glow:rgba(0,229,255,.35);--text-main:#fff;--text-dim:#b3b3b3;--line:rgba(255,255,255,.1);--ease:cubic-bezier(.23,1,.32,1)}
-*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:#050505;color:var(--text-main);font-family:Inter,Arial,sans-serif;min-height:100vh;overflow-x:hidden}button,input{font:inherit}button,a,.clickable{cursor:pointer}button{border:0}#global-bg{position:fixed;inset:0;z-index:-2;background:#050505 center/cover no-repeat}#global-bg:after{content:"";position:absolute;inset:0;background:rgba(5,5,5,.87);backdrop-filter:blur(5px)}
-.hidden{display:none!important}.splash-wrap{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:28px}.brand-logo{display:flex;align-items:center;gap:13px;margin-bottom:24px}.brand-logo svg{width:56px;filter:drop-shadow(0 0 14px var(--accent-glow))}.brand-logo h1{font-size:clamp(2.7rem,8vw,4.5rem);font-weight:900;letter-spacing:-3px;margin:0}.auth-container{background:var(--bg-panel);backdrop-filter:blur(20px);padding:clamp(25px,5vw,44px);border-radius:14px;width:min(450px,100%);border:1px solid var(--line);box-shadow:0 25px 80px #0008}.auth-container h2{font-size:2rem;margin:0 0 24px}.auth-container input,.search-box input,.settings-input{width:100%;padding:15px;margin:0 0 15px;background:#ffffff0b;border:1px solid #383838;border-radius:7px;color:white;outline:none}.auth-container input:focus,.search-box input:focus,.settings-input:focus{border-color:var(--accent)}.btn-main{padding:14px 18px;background:var(--accent);color:#001115;border-radius:7px;font-weight:800;transition:.2s}.btn-main:hover{filter:brightness(1.1);transform:translateY(-1px)}.auth-container .btn-main{width:100%;margin-bottom:17px}.auth-switch{text-align:center;color:var(--text-dim);font-size:.9rem}.auth-switch span{color:white;font-weight:700;text-decoration:underline;cursor:pointer}.auth-note{font-size:.78rem;color:#929292;line-height:1.5;margin-top:15px}
-nav{position:fixed;top:0;width:100%;padding:16px 5%;display:flex;justify-content:space-between;align-items:center;gap:24px;z-index:100;transition:.25s}nav.scrolled{background:#050505f2;backdrop-filter:blur(12px);border-bottom:1px solid #222}.nav-left,.nav-links,.nav-right{display:flex;align-items:center;gap:24px}.nav-brand{display:flex;align-items:center;gap:8px;font-weight:900;letter-spacing:-.8px;font-size:1.35rem;white-space:nowrap}.nav-brand svg{width:32px}.nav-link{color:var(--text-dim);text-decoration:none;font-size:.9rem;font-weight:600;white-space:nowrap}.nav-link:hover,.nav-link.active{color:white}.search-box{position:relative;width:min(250px,27vw)}.search-box input{margin:0;padding:10px 14px 10px 37px;font-size:.9rem;border-radius:22px}.search-icon{position:absolute;left:13px;top:50%;transform:translateY(-50%);opacity:.65}.user-badge{border:1px solid var(--accent);padding:6px 11px;border-radius:4px;color:var(--accent);font-size:.75rem;font-weight:800;white-space:nowrap}
-.hero{min-height:690px;height:88vh;max-height:900px;position:relative;display:flex;align-items:center;padding:100px 5% 110px;background-size:cover;background-position:center 30%;border-radius:0 0 34px 34px;overflow:hidden}.hero-overlay{position:absolute;inset:0;background:linear-gradient(90deg,#000 5%,rgba(0,0,0,.78) 32%,transparent 78%),linear-gradient(0deg,#050505 0%,transparent 45%)}.hero-content{position:relative;z-index:2;max-width:700px}.hero-meta{display:flex;flex-wrap:wrap;gap:12px;margin-bottom:20px;font-size:.85rem;font-weight:800;color:var(--accent);letter-spacing:1.2px}.hero-title{font-size:clamp(3rem,7.5vw,6rem);line-height:.98;letter-spacing:-3px;font-weight:900;margin:0 0 20px;text-shadow:0 10px 30px #0008}.hero-description{font-size:1.05rem;line-height:1.7;color:#ddd;max-width:580px;margin:0 0 28px}.hero-actions{display:flex;gap:12px;flex-wrap:wrap}.btn-secondary{padding:14px 18px;background:#ffffff1c;color:white;border:1px solid #ffffff20;border-radius:7px;font-weight:800}.btn-secondary:hover{background:#ffffff30}
-.content-section{padding:20px 5% 60px;position:relative;z-index:2;margin-top:-65px}.row-container{margin-bottom:48px;scroll-margin-top:100px}.row-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px}.row-title{font-size:clamp(1.25rem,2vw,1.65rem);font-weight:800;border-left:4px solid var(--accent);padding-left:14px;margin:0}.row-subtitle{color:var(--text-dim);font-size:.85rem}.shelf{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:20px}.card{position:relative;border-radius:9px;overflow:hidden;aspect-ratio:16/9;background:var(--bg-card);box-shadow:0 10px 20px #0007;transition:transform .35s var(--ease),box-shadow .35s;isolation:isolate}.card:hover{transform:scale(1.035) translateY(-4px);z-index:5;box-shadow:0 20px 40px #000b}.card img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .5s}.card:hover img{transform:scale(1.04)}.card-info{position:absolute;inset:0;background:linear-gradient(0deg,rgba(0,0,0,.95),transparent 75%);display:flex;flex-direction:column;justify-content:flex-end;padding:17px;opacity:0;transition:opacity .25s}.card:hover .card-info,.card:focus-within .card-info{opacity:1}.card-info h3{font-size:1.05rem;margin:0 0 6px}.card-info p{font-size:.76rem;color:var(--accent);margin:0;font-weight:800;letter-spacing:.5px}.card-play{position:absolute;left:16px;top:16px;background:var(--accent);color:#001115;width:40px;height:40px;border-radius:50%;display:grid;place-items:center;font-size:1rem;font-weight:900;opacity:0;transform:translateY(4px);transition:.25s}.card:hover .card-play{opacity:1;transform:translateY(0)}.btn-list-add{position:absolute;right:12px;top:12px;width:35px;height:35px;border-radius:50%;background:#0009;color:white;backdrop-filter:blur(5px);display:grid;place-items:center;font-size:1.25rem;z-index:3}.btn-list-add:hover{background:white;color:black}.empty-state{color:var(--text-dim);padding:22px;border:1px dashed #333;border-radius:8px}
-.modal{position:fixed;inset:0;background:#000f;backdrop-filter:blur(9px);z-index:2000;opacity:0;pointer-events:none;transition:opacity .25s;display:flex;align-items:center;justify-content:center;padding:24px}.modal.active{opacity:1;pointer-events:auto}.close-modal{position:absolute;top:18px;right:28px;font-size:2.8rem;font-weight:300;line-height:1;color:white;z-index:2100;cursor:pointer}.close-modal:hover{color:var(--accent)}.player-shell{width:min(1200px,96vw);position:relative;z-index:2005;padding-top:44px}.player-heading{margin:0 0 12px}.player-heading h2{margin:0 0 5px;font-size:1.3rem}.player-heading p{margin:0;color:var(--accent);font-size:.9rem}.video-wrap{width:100%;aspect-ratio:16/9;background:#000;border:1px solid #292929;border-radius:8px;overflow:hidden}.video-wrap iframe,#video-frame{width:100%;height:100%;border:0;display:block}.end-screen{width:100%;max-height:calc(100vh - 105px);overflow:auto;padding:24px 0 8px}.end-screen h2{font-size:clamp(1.4rem,3vw,2.1rem);line-height:1.25;margin:0 0 8px;text-transform:none}.end-screen-subtitle{margin:0 0 22px;color:var(--text-dim)}.end-screen .shelf{grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:16px}.end-screen .card-info{opacity:1}.end-screen .card-play{opacity:1;transform:none}.end-home-btn{margin-top:22px}.panel-container{background:var(--bg-surface);border:1px solid #333;padding:30px;border-radius:12px;width:min(560px,94vw);max-height:82vh;overflow:auto;z-index:2050;box-shadow:0 20px 50px #000b}.panel-container h2{margin:0 0 20px;color:var(--accent)}.ep-row{padding:14px 2px;border-bottom:1px solid #282828;display:flex;justify-content:space-between;align-items:center;gap:15px}.ep-row h4{font-size:.95rem;margin:0 0 5px}.ep-row span{font-size:.78rem;color:var(--text-dim)}.ep-play-btn{padding:9px 14px;background:#ffffff12;color:white;border-radius:5px;font-weight:800;font-size:.78rem}.ep-play-btn:hover{background:var(--accent);color:#000}.settings-label{display:block;color:var(--text-dim);font-size:.85rem;margin:12px 0 8px}.settings-row{display:flex;gap:10px}.settings-row .settings-input{margin:0}.settings-section{margin-top:22px;padding-top:20px;border-top:1px solid #292929}.settings-section h3{margin:0 0 10px;font-size:1rem}.settings-help{font-size:.78rem;color:var(--text-dim);line-height:1.55;margin:9px 0}.account-list{display:grid;gap:9px;margin:12px 0 18px}.account-item{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px;border:1px solid #303030;background:#ffffff05;border-radius:8px}.account-item strong{display:block;font-size:.9rem;overflow-wrap:anywhere}.account-item small{display:block;color:var(--text-dim);font-size:.73rem;margin-top:4px}.account-item button{padding:8px 11px;background:#ffffff15;color:white;border-radius:5px;font-weight:800;font-size:.75rem;white-space:nowrap}.account-item button:not(:disabled):hover{background:var(--accent);color:#001115}.account-item button:disabled{opacity:.55;cursor:default}.pro-card{border:1px solid #00e5ff60;background:linear-gradient(135deg,#00e5ff12,#ffffff03);border-radius:9px;padding:16px}.pro-card h3{margin:0 0 8px;color:var(--accent)}.pro-card p{font-size:.84rem;line-height:1.55;color:#ddd;margin:0 0 12px}.pro-status{font-weight:800;color:var(--accent);font-size:.8rem;margin-bottom:12px}.pro-checkout{padding:14px;margin-top:12px;background:#0006;border:1px solid #ffffff18;border-radius:7px}.pro-checkout p{font-size:.78rem}.copyright-box{margin-top:25px;padding-top:18px;border-top:1px solid #333;font-size:.74rem;color:var(--text-dim);text-align:center;line-height:1.6}.copyright-box span{color:var(--accent);font-weight:700}#toast{position:fixed;bottom:25px;left:50%;transform:translate(-50%,100px);padding:12px 24px;background:var(--accent);color:#001115;border-radius:24px;font-weight:800;transition:transform .35s;z-index:3000;box-shadow:0 10px 25px #00e5ff30;max-width:90vw;text-align:center}#toast.show{transform:translate(-50%,0)}footer{padding:25px 5% 35px;color:#777;font-size:.78rem;border-top:1px solid #1d1d1d}
-.join-server{position:fixed;right:18px;bottom:18px;z-index:1500;display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:13px 17px;border:1px solid #00e5ff;border-radius:9px;background:#00e5ff;color:#001115;font-size:.88rem;font-weight:900;text-decoration:none;box-shadow:0 8px 28px #00e5ff35;transition:transform .18s,filter .18s}.join-server:hover,.join-server:focus-visible{filter:brightness(1.08);transform:translateY(-2px);outline:2px solid white;outline-offset:3px}
-@media(max-width:620px){.join-server{right:12px;bottom:12px;padding:11px 13px;font-size:.8rem}}
-@media(max-width:900px){nav{padding:13px 4%;gap:12px}.nav-links{gap:14px}.nav-link{font-size:.82rem}.nav-right{gap:10px}.user-badge{display:none}.hero{min-height:620px}.shelf{grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:14px}}
-@media(max-width:620px){nav{flex-wrap:wrap;background:#050505e8}.nav-left{gap:12px}.nav-brand{font-size:1.1rem}.nav-links{gap:12px}.nav-link{font-size:.75rem}.nav-right{width:100%;order:3}.search-box{width:100%}.hero{height:auto;min-height:680px;padding:145px 6% 100px;background-position:60% center}.hero-overlay{background:linear-gradient(90deg,#000 0%,#000b 55%,#0004 100%),linear-gradient(0deg,#050505,transparent 65%)}.hero-title{letter-spacing:-1.5px}.hero-description{font-size:.95rem}.content-section{padding:18px 5% 45px;margin-top:-50px}.shelf{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.card-info{opacity:1;padding:10px;background:linear-gradient(0deg,rgba(0,0,0,.9),transparent 85%)}.card-info h3{font-size:.82rem}.card-info p{font-size:.65rem}.card-play{display:none}.btn-list-add{width:29px;height:29px;right:7px;top:7px}.panel-container{padding:22px}.close-modal{right:17px;top:13px}.player-shell{padding-top:38px}.player-heading h2{font-size:1.05rem}}
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Aura.proxy | Proxy Finder</title>
 
-#neptune-load-error{display:none;position:fixed;left:12px;right:12px;bottom:12px;z-index:99999;background:#240d10;color:#fff;border:1px solid #ff6878;border-radius:10px;padding:14px 16px;font:14px/1.45 Arial,sans-serif;box-shadow:0 8px 30px #0009}#neptune-load-error strong{display:block;margin-bottom:4px;color:#ff9aa5}
-@media(max-width:760px){nav{padding:12px 4%;gap:10px;flex-wrap:wrap}.nav-left,.nav-links,.nav-right{gap:10px}.nav-links{order:3;width:100%;overflow:auto}.search-box{width:min(190px,40vw)}.join-server{position:fixed!important;right:10px!important;bottom:10px!important;top:auto!important;z-index:9999}}
+<style>
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background: #090910;
+    color: #f4f4fa;
+    font-family: Arial, sans-serif;
+    min-height: 100vh;
+}
+
+header {
+    height: 75px;
+    padding: 0 7%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid #222230;
+    background: #0c0c15;
+}
+
+.logo {
+    font-size: 23px;
+    font-weight: 800;
+    letter-spacing: -1px;
+}
+
+.logo span {
+    color: #a879ff;
+}
+
+.status {
+    color: #aaa5bc;
+    font-size: 12px;
+}
+
+.status i {
+    display: inline-block;
+    width: 7px;
+    height: 7px;
+    background: #8d65ff;
+    border-radius: 50%;
+    margin-right: 7px;
+}
+
+main {
+    max-width: 1050px;
+    margin: auto;
+    padding: 75px 25px;
+}
+
+.hero {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.tag {
+    display: inline-block;
+    padding: 7px 13px;
+    border: 1px solid #453267;
+    background: #1a1229;
+    color: #b99aff;
+    border-radius: 30px;
+    font-size: 11px;
+    margin-bottom: 20px;
+}
+
+h1 {
+    font-size: clamp(38px, 7vw, 65px);
+    letter-spacing: -3px;
+    margin-bottom: 15px;
+}
+
+h1 span {
+    color: #a879ff;
+}
+
+.subtitle {
+    color: #92909f;
+    font-size: 14px;
+    line-height: 1.7;
+}
+
+.search {
+    max-width: 620px;
+    margin: 30px auto 45px;
+    position: relative;
+}
+
+.search input {
+    width: 100%;
+    background: #12121e;
+    border: 1px solid #302b42;
+    outline: none;
+    border-radius: 12px;
+    padding: 17px 20px;
+    color: white;
+    font-size: 14px;
+    transition: .2s;
+}
+
+.search input:focus {
+    border-color: #9563ff;
+    box-shadow: 0 0 20px #8751ff18;
+}
+
+.section-title {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+.section-title h2 {
+    font-size: 17px;
+}
+
+.count {
+    color: #a879ff;
+    font-size: 12px;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+}
+
+.site {
+    background: #11111c;
+    border: 1px solid #262537;
+    border-radius: 13px;
+    padding: 21px;
+    transition: .2s;
+}
+
+.site:hover {
+    border-color: #8959e9;
+    transform: translateY(-3px);
+    background: #151421;
+}
+
+.site-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 17px;
+}
+
+.site h3 {
+    font-size: 15px;
+    font-weight: 650;
+}
+
+.number {
+    color: #817c93;
+    font-size: 11px;
+}
+
+.site p {
+    font-size: 11px;
+    color: #777487;
+    margin-bottom: 19px;
+    overflow-wrap: anywhere;
+}
+
+.launch {
+    width: 100%;
+    background: #8656e9;
+    border: none;
+    border-radius: 8px;
+    color: white;
+    padding: 11px;
+    font-size: 12px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: .2s;
+}
+
+.launch:hover {
+    background: #a174ff;
+}
+
+.empty {
+    display: none;
+    color: #777487;
+    text-align: center;
+    padding: 35px;
+}
+
+footer {
+    border-top: 1px solid #222230;
+    padding: 25px;
+    text-align: center;
+    color: #625f70;
+    font-size: 11px;
+}
+
+@media(max-width: 600px) {
+    header { padding: 0 5%; }
+    main { padding: 55px 17px; }
+    .grid { grid-template-columns: 1fr; }
+    h1 { letter-spacing: -2px; }
+}
 </style>
 </head>
+
 <body>
-<div id="neptune-load-error" role="alert"><strong>Neptune had a loading error</strong><span id="neptune-load-error-text">An unexpected browser error occurred.</span></div>
-<div id="global-bg"></div>
-<a class="join-server" href="https://yyapora.github.io/-/?invite=3ra1l0mvqsqew4-ohxp1smvqsqew4&amp;owner=kyphr" target="_blank" rel="noopener noreferrer" aria-label="Join the Neptune community server">Join the server! <span aria-hidden="true">↗</span></a>
-<div id="toast" role="status" aria-live="polite">Notification</div>
-<section id="screen-splash" class="splash-wrap">
-  <div class="brand-logo"><svg viewBox="0 0 100 100" aria-hidden="true"><circle cx="50" cy="50" r="25" fill="none" stroke="#00E5FF" stroke-width="6"/><ellipse cx="50" cy="50" rx="40" ry="12" fill="none" stroke="#00E5FF" stroke-width="4" transform="rotate(-30 50 50)"/><text x="50" y="58" font-family="Inter" font-size="24" font-weight="900" fill="#fff" text-anchor="middle">N</text></svg><h1>NEPTUNE</h1></div>
-  <div class="auth-container">
-    <div id="auth-signin"><h2>Welcome Back</h2><form id="login-form"><input id="in-user" type="text" placeholder="Username" autocomplete="username" required><input id="in-pass" type="password" placeholder="Password" autocomplete="current-password" required><button class="btn-main" type="submit">Enter Neptune</button></form><p class="auth-switch">New here? <span id="go-signup">Create an account</span></p></div>
-    <div id="auth-signup" class="hidden"><h2>Create Account</h2><form id="signup-form"><input id="up-user" type="text" placeholder="Choose a username" autocomplete="username" minlength="2" maxlength="24" required><input id="up-pass" type="password" placeholder="Create a password" autocomplete="new-password" minlength="4" required><button class="btn-main" type="submit">Sign Up</button></form><p class="auth-switch">Already have an account? <span id="go-signin">Log in</span></p></div>
-    <p class="auth-note">This is a local demo account stored in this browser. It does not create a secure online account or sync between devices.</p>
-  </div>
-</section>
-<main id="screen-home" class="hidden">
-  <nav id="navbar"><div class="nav-left"><div class="nav-brand"><svg viewBox="0 0 100 100" aria-hidden="true"><circle cx="50" cy="50" r="25" fill="none" stroke="#00E5FF" stroke-width="6"/><ellipse cx="50" cy="50" rx="40" ry="12" fill="none" stroke="#00E5FF" stroke-width="4" transform="rotate(-30 50 50)"/><text x="50" y="58" font-family="Inter" font-size="24" font-weight="900" fill="#fff" text-anchor="middle">N</text></svg> NEPTUNE</div><div class="nav-links"><a href="#home" class="nav-link active">Home</a><a href="#movies" class="nav-link">Movies</a><a href="#series" class="nav-link">Shows</a><a href="#my-list-row" id="my-list-link" class="nav-link">My List</a><a href="#" id="accounts-link" class="nav-link">Accounts</a><a href="#" id="settings-link" class="nav-link">Settings</a><a href="#" id="logout-link" class="nav-link">Log out</a></div></div><div class="nav-right"><div class="search-box"><span class="search-icon">⌕</span><input id="search-input" type="search" placeholder="Search movies and shows…" aria-label="Search movies and shows"></div><div class="user-badge" id="user-badge">ACCOUNT</div></div></nav>
-  <section class="hero" id="home" style="background-image:url('https://i.ytimg.com/vi/GyQzh3iih4E/maxresdefault.jpg')"><div class="hero-overlay"></div><div class="hero-content"><div class="hero-meta"><span>NEPTUNE COLLECTION</span><span>•</span><span>8 EPISODES</span><span>•</span><span>ANIMATED SERIES</span></div><h1 class="hero-title">THE AMAZING<br>WORLD OF<br>GUMBALL</h1><p class="hero-description">Step into Elmore with Gumball and Darwin. Browse the featured episodes or explore the movie collection below.</p><div class="hero-actions"><button class="btn-main" id="hero-play">▶ Play Episode</button><button class="btn-secondary" id="hero-episodes">☰ View Episodes</button></div></div></section>
-  <section class="content-section">
-    <div class="row-container" id="movies"><div class="row-header"><h2 class="row-title">Blockbuster Movies</h2><span class="row-subtitle" id="movie-count"></span></div><div class="shelf" id="movie-shelf"></div></div>
-    <div class="row-container" id="series"><div class="row-header"><h2 class="row-title">Shows & Episodes</h2><span class="row-subtitle">The Amazing World of Gumball</span></div><div class="shelf" id="main-shelf"></div></div>
-    <div class="row-container hidden" id="my-list-row"><div class="row-header"><h2 class="row-title">My List</h2></div><div class="shelf" id="list-shelf"></div></div>
-    <div id="no-results" class="empty-state hidden">No titles match your search.</div>
-  </section>
-  <footer>Neptune is an independent viewing interface. Video playback is provided by YouTube; rights remain with their respective owners.</footer>
+
+<header>
+    <div class="logo">Aura<span>.proxy</span></div>
+    <div class="status"><i></i> Proxy Directory</div>
+</header>
+
+<main>
+
+    <section class="hero">
+        <div class="tag">AURA PROXY FINDER</div>
+        <h1>Browse beyond <span>limits.</span></h1>
+        <p class="subtitle">
+            Find your preferred browsing destination.<br>
+            Choose a proxy and launch it in a new blank tab.
+        </p>
+    </section>
+
+    <div class="search">
+        <input
+            type="text"
+            id="search"
+            placeholder="Search proxy destinations..."
+            autocomplete="off"
+        >
+    </div>
+
+    <div class="section-title">
+        <h2>Available destinations</h2>
+        <span class="count" id="count">8 DESTINATIONS</span>
+    </div>
+
+    <div class="grid" id="grid"></div>
+
+    <div class="empty" id="empty">
+        No matching destinations found.
+    </div>
+
 </main>
-<div id="player-modal" class="modal" role="dialog" aria-modal="true" aria-label="Video player"><button class="close-modal" id="close-player" aria-label="Close player">×</button><div class="player-shell"><div class="player-heading" id="player-heading"><h2 id="pb-title">Title</h2><p id="pb-subtitle">Now playing</p></div><div class="video-wrap" id="video-host"><div id="video-frame"></div></div><section id="end-screen" class="end-screen hidden" aria-live="polite"><h2>since you finished this here's something you want to watch</h2><p class="end-screen-subtitle">Pick something else from Neptune.</p><div id="recommendation-shelf" class="shelf"></div><button class="btn-secondary end-home-btn" id="end-home">Back to Neptune</button></section></div></div>
-<div id="episodes-modal" class="modal" role="dialog" aria-modal="true" aria-label="Episode list"><button class="close-modal" id="close-episodes" aria-label="Close episodes">×</button><div class="panel-container"><h2 id="ep-modal-title">Select Episode</h2><div id="ep-list-container"></div></div></div>
-<div id="settings-modal" class="modal" role="dialog" aria-modal="true" aria-label="Settings"><button class="close-modal" id="close-settings" aria-label="Close settings">×</button><div class="panel-container"><h2>Command Center</h2>
-  <section class="pro-card" aria-labelledby="pro-title"><h3 id="pro-title">Neptune Pro</h3><div id="pro-status" class="pro-status">PRO STATUS: NOT ACTIVE</div><p>Prototype benefit: an ad-free Neptune experience. YouTube controls ads inserted into embedded videos, so this local demo cannot disable those third-party ads.</p><button class="btn-main" id="pro-buy-btn" type="button">Get Neptune Pro</button><div id="pro-checkout" class="pro-checkout hidden"><p><strong>Test checkout</strong><br>This is a demo purchase only. Activating it saves a Pro test flag to this browser account; no payment is processed. Ads inserted by YouTube itself may still appear in embedded videos because YouTube controls those ads.</p><button class="btn-main" id="pro-activate-btn" type="button">Activate Neptune Pro (Test)</button></div></section>
-  <section class="settings-section" aria-labelledby="accounts-heading"><h3 id="accounts-heading">Accounts on this browser</h3><div id="accounts-list" class="account-list"></div><form id="add-account-form"><label class="settings-label" for="account-username">Link an account or create another</label><input class="settings-input" id="account-username" type="text" minlength="2" maxlength="24" placeholder="Username" autocomplete="username" required><input class="settings-input" id="account-password" type="password" minlength="4" placeholder="Password (at least 4 characters)" autocomplete="current-password" required><button class="btn-main" type="submit" style="width:100%">Add account and switch</button></form><p class="settings-help">Enter the credentials for an account that already exists to link it, or choose a new username to create another account. Linked accounts can be switched from this list. Accounts and passwords are stored locally in this browser and are not securely synced online.</p></section>
-  <section class="settings-section"><h3>Appearance</h3><label class="settings-label" for="wall-input">Custom Wallpaper URL</label><div class="settings-row"><input class="settings-input" id="wall-input" type="url" placeholder="Paste image URL…"><button class="btn-main" id="apply-wall" type="button">Apply</button></div><button class="btn-secondary" id="clear-wall" style="margin-top:12px;width:100%" type="button">Reset Wallpaper</button></section>
-  <div class="copyright-box"><p>Neptune · 2026</p><p>Video content is hosted by YouTube and remains the property of its respective rights holders.</p></div></div></div>
+
+<footer>
+    AURA.PROXY &copy; 2026 · Proxy Finder
+</footer>
+
 <script>
-// Surface JavaScript errors in restricted previews instead of failing silently.
-window.addEventListener('error', function (event) {
-  const box = document.getElementById('neptune-load-error');
-  const message = document.getElementById('neptune-load-error-text');
-  if (box && message) { message.textContent = event.message || 'A script or resource failed to load.'; box.style.display = 'block'; }
+const sites = [
+    {
+        name: "Brave Marble",
+        url: "https://s3.us-east-2.amazonaws.com/bravemarble93/index.html"
+    },
+    {
+        name: "Rough Pebble",
+        url: "https://s3.us-east-2.amazonaws.com/roughpebble80/index.html"
+    },
+    {
+        name: "Cozy Pillow",
+        url: "https://s3.us-east-2.amazonaws.com/cozypillow45/index.html"
+    },
+    {
+        name: "Lucky Pebble",
+        url: "https://s3.us-east-2.amazonaws.com/luckypebble87/index.html"
+    },
+    {
+        name: "Fancy Maple",
+        url: "https://s3.us-east-2.amazonaws.com/fancymaple62/index.html"
+    },
+    {
+        name: "Bold Muffin",
+        url: "https://s3.us-east-2.amazonaws.com/boldmuffin94/index.html"
+    },
+    {
+        name: "Cozy Maple",
+        url: "https://s3.us-east-2.amazonaws.com/cozymaple26/index.html"
+    },
+    {
+        name: "Dusty Lemon",
+        url: "https://s3.us-east-2.amazonaws.com/dustylemon10/index.htm"
+    }
+];
+
+const grid = document.getElementById("grid");
+const search = document.getElementById("search");
+const count = document.getElementById("count");
+const empty = document.getElementById("empty");
+
+function renderSites(filter = "") {
+    grid.innerHTML = "";
+
+    const filtered = sites.filter(site =>
+        site.name.toLowerCase().includes(filter.toLowerCase()) ||
+        site.url.toLowerCase().includes(filter.toLowerCase())
+    );
+
+    count.textContent = filtered.length + " DESTINATIONS";
+    empty.style.display = filtered.length ? "none" : "block";
+
+    filtered.forEach((site) => {
+        const index = sites.indexOf(site);
+
+        const card = document.createElement("div");
+        card.className = "site";
+
+        const top = document.createElement("div");
+        top.className = "site-top";
+
+        const heading = document.createElement("h3");
+        heading.textContent = site.name;
+
+        const number = document.createElement("span");
+        number.className = "number";
+        number.textContent = "#" + String(index + 1).padStart(2, "0");
+
+        top.append(heading, number);
+
+        const address = document.createElement("p");
+        address.textContent = site.url;
+
+        const button = document.createElement("button");
+        button.className = "launch";
+        button.textContent = "Launch Proxy ↗";
+        button.addEventListener("click", () => launchSite(site.url));
+
+        card.append(top, address, button);
+        grid.appendChild(card);
+    });
+}
+
+function launchSite(url) {
+    const tab = window.open("about:blank", "_blank");
+
+    if (!tab) {
+        alert("Your browser blocked the new tab. Allow popups and try again.");
+        return;
+    }
+
+    tab.document.open();
+    tab.document.write(`
+        <!DOCTYPE html>
+        <html>
+        <head>
+            <title>Aura.proxy</title>
+            <meta name="viewport" content="width=device-width, initial-scale=1">
+            <style>
+                * { margin: 0; padding: 0; }
+                html, body, iframe {
+                    width: 100%;
+                    height: 100%;
+                    border: 0;
+                    background: #090910;
+                }
+            </style>
+        </head>
+        <body>
+            <iframe
+                src="${url}"
+                allow="fullscreen"
+                referrerpolicy="no-referrer"
+                title="Proxy destination">
+            </iframe>
+        </body>
+        </html>
+    `);
+    tab.document.close();
+}
+
+search.addEventListener("input", () => {
+    renderSites(search.value);
 });
-window.addEventListener('unhandledrejection', function (event) {
-  const box = document.getElementById('neptune-load-error');
-  const message = document.getElementById('neptune-load-error-text');
-  if (box && message) { message.textContent = String(event.reason || 'An asynchronous task failed.'); box.style.display = 'block'; }
-});
-// Storage adapter: embedded previews can block localStorage on opaque origins.
-const neptuneStorage = {
-  getItem(key) { try { return window.localStorage.getItem(key); } catch (e) { return null; } },
-  setItem(key, value) { try { window.localStorage.setItem(key, value); return true; } catch (e) { return false; } },
-  removeItem(key) { try { window.localStorage.removeItem(key); return true; } catch (e) { return false; } }
-};
-const GUMBALL_LOGO='https://thumb.wikimedia.org/wikipedia/en/thumb/d/db/The_Amazing_World_of_Gumball_logo.svg/1280px-The_Amazing_World_of_Gumball_logo.svg.png';
-const EPISODES=[
- {id:'gumball-awkwardness',title:'The Awkwardness',video:'GyQzh3iih4E'},
- {id:'gumball-factory',title:'The Factory',video:'uBpBbuxd0GQ'},
- {id:'gumball-bus',title:'The Bus',video:'M378PDAkDgM'},
- {id:'gumball-bros',title:'The Bros',video:'bUGudiyGMl4'},
- {id:'gumball-law',title:'The Law',video:'tqb1LjUZ_Fo'},
- {id:'gumball-joy',title:'The Joy',video:'FJKEt9DgFTk'},
- {id:'gumball-coach',title:'The Coach',video:'xy7pyA7Ypjk'},
- {id:'gumball-diary',title:'The Diary',video:'yygEDwV8ilM'}
-];
-const MOVIES=[
- {id:'spongebob-movie',title:'The SpongeBob Movie',img:'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTXYugQwR4xgWqeZokjwjMwEtLrHIeRUKRRjwjxROLFTUk4ClAP8l43kKcnbsw-cCUEYGogKQ&s=10',video:'O1MSGBhXDOA'},
- {id:'cloudy-2',title:'Cloudy with a Chance of Meatballs 2',img:'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT3lkFQVLLPJazXSNIksrs8PFeRr9YctuYhbDG-WiOQIccDtSZvPMmSTKaRTJ6tinCaE77zrA&s=10',video:'_dmxlefoYvk'},
- {id:'matilda',title:'Matilda (1996)',img:'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRhio3TBJF_yUyoXj_yWBns771D_wIm7po-QARy8botjwAEa4N9YbUtB9tzVeB0oyqfWLyS&s=10',video:'_F8kU1vb_rk'},
- {id:'longest-yard',title:'The Longest Yard (2005)',img:'https://thumbnails.cbsig.net/CBS_Production_Entertainment_VMS/2023/08/11/2254288451861/TLNYD_US_2005_SA_16x9_1920x1080_2308553_1920x1080.jpg',video:'uGJv_zSRiR0'},
- {id:'rise-guardians',title:'Rise of the Guardians',img:'https://upload.wikimedia.org/wikipedia/en/9/92/Rise_of_the_Guardians_poster.jpg',video:'FHw6pivOASg'},
- {id:'the-journey',title:'The Journey',img:'https://m.media-amazon.com/images/M/MV5BMjA5MTE1MjQyNV5BMl5BanBnXkFtZTcwODI4NDMwNw@@._V1_FMjpg_UX1000_.jpg',video:'iin0i9_W4a4'},
- {id:'free-birds',title:'Free Birds',img:'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTGofnxLA7J20zyQ70CfwNgbITYz_5qvtmbHL_0x94ArweZEQEknW9KWpncDoGFBf5ZGuLBitLKu7sjtfirQpIENhYn503j6p75vivOlBQ&s=10',video:'dd8rHLkQ1Ps'},
- {id:'youve-got-mail',title:"You've Got Mail",img:'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR3KhjgKTXaxzfv-hiVHWd5zoHpMVVxHxGJEXNw4SkusuCZmhuE7_PhVGR-j1rQBJ22IV9r7VN-cAGIoRlNQyFH70jEw8thDRecSZ9q2A&s=10',video:'EdJJHLK8Luk'},
- {id:'bumblebee',title:'Bumblebee',img:'https://m.media-amazon.com/images/M/MV5BMjUwNjU5NDMyNF5BMl5BanBnXkFtZTgwNzgxNjM2NzM@._V1_.jpg',video:'nzn1m-hbPYw'},
- {id:'dogs-way-home',title:"A Dog's Way Home",img:'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS7MbePoZ_qxYsLiYt1Q3SBXGB6WOfyc-pqt8aU4emwj4MGGblJB12Hv5aRvmOr6lhH4DbF&s=10',video:'2mMQd11UI1s'},
- {id:'pinocchio',title:'Pinocchio',img:'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT606MbUHVNmVbDDCu7zd-lJDFzUU3mQSKIXXWD_jb2pzkch8FuT0PRmBkETyfaucDVFVOJ&s=10',video:'a_uaXlEZq9E'},
- {id:'simple-wish',title:'A Simple Wish',img:'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRgal8P2pnrc45Z7ftBdfCv_IWFzlLFXLtASr7haF4yc38orUcVO0jZbuINy12_-DBJqf4s&s=10',video:'gnobjwbA_7w'},
- {id:'uglydolls',title:'UglyDolls',img:'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT_ptb_75X2c5GOSlx7X4dCzcvvOMDMpHRu_b-L8bwBWMigrDkAvCd2ka62wsMn7Wo8akBS&s=10',video:'ixbkzsNCgV8'}
-];
-const MULTIVERSE_THUMB='https://www.google.com/goto?url=CAESbAHrOzAVUDwFm7t_XTnY3wRNd-gXPmZ6bvRjqjgGLi93pnu01fJQxtRvi7uMccwThL13jAuVl-L5fZ7p471ao3VrS5VH2ywpGbtvkNzoQVKAgmL1OA1qrnHCC47xLU6N7TOKqNzCNO8pMxJJSA';
-const SERIES=[
- {id:'gumball',title:'The Amazing World of Gumball',img:GUMBALL_LOGO,type:'series',creator:'Cartoon Network',episodes:EPISODES},
- {id:'minecraft-multiverse',title:'I joined the minecraft multiverse',img:MULTIVERSE_THUMB,type:'series',creator:'Kolanii',episodes:[
-  {id:'multiverse-1',title:'Episode 1',video:'JuiUOb6pk3o',start:151},
-  {id:'multiverse-2',title:'Episode 2',video:'IlqUnbV_NYo',start:21},
-  {id:'multiverse-3',title:'Episode 3',video:'l9oLY2CvzQw'},
-  {id:'multiverse-4',title:'Episode 4',video:'aQ9hPApcwc4'},
-  {id:'multiverse-5',title:'Episode 5',video:'KqNtWvCaukM'},
-  {id:'multiverse-6',title:'Episode 6',video:'WVmadXSywE8',start:1741}
- ]}
-];
-const ALL=[...MOVIES,...SERIES];
-const state={user:readJSON('nep_user',null),list:[],progress:{}};
-function readJSON(key,fallback){try{const v=JSON.parse(neptuneStorage.getItem(key));return v===null?fallback:v}catch{return fallback}}
-const $=id=>document.getElementById(id);
-function escapeHTML(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
-function notify(message){const t=$('toast');t.textContent=message;t.classList.add('show');clearTimeout(notify.timer);notify.timer=setTimeout(()=>t.classList.remove('show'),2600)}
-function switchAuth(mode){$('auth-signin').classList.toggle('hidden',mode!=='signin');$('auth-signup').classList.toggle('hidden',mode!=='signup')}
-function accountKey(user=state.user){return String(user?.user||'').trim().toLowerCase()}
-function saveLinkedAccount(account){if(!account?.user)return;const key=account.user.toLowerCase();const linked=readJSON('nep_saved_accounts',[]).filter(x=>typeof x==='string');if(!linked.some(x=>x.toLowerCase()===key))linked.push(account.user);neptuneStorage.setItem('nep_saved_accounts',JSON.stringify(linked))}
-function loadAccountData(){const key=accountKey();if(!key){state.list=[];state.progress={};return}const lists=readJSON('nep_lists',{}),progressByUser=readJSON('nep_progress_by_user',{});if(!Object.prototype.hasOwnProperty.call(lists,key)&&neptuneStorage.getItem('nep_list')!==null){lists[key]=readJSON('nep_list',[]);neptuneStorage.removeItem('nep_list')}if(!Object.prototype.hasOwnProperty.call(progressByUser,key)&&neptuneStorage.getItem('nep_progress')!==null){progressByUser[key]=readJSON('nep_progress',{});neptuneStorage.removeItem('nep_progress')}neptuneStorage.setItem('nep_lists',JSON.stringify(lists));neptuneStorage.setItem('nep_progress_by_user',JSON.stringify(progressByUser));state.list=Array.isArray(lists[key])?lists[key]:[];state.progress=progressByUser[key]&&typeof progressByUser[key]==='object'?progressByUser[key]:{}}
-function saveAccountList(){const all=readJSON('nep_lists',{});all[accountKey()]=state.list;neptuneStorage.setItem('nep_lists',JSON.stringify(all))}
-function saveAccountProgress(){const all=readJSON('nep_progress_by_user',{});all[accountKey()]=state.progress;neptuneStorage.setItem('nep_progress_by_user',JSON.stringify(all))}
-function renderProStatus(){const active=Boolean(state.user?.pro);$('pro-status').textContent=active?'PRO STATUS: ACTIVE (TEST MODE)':'PRO STATUS: NOT ACTIVE';$('pro-buy-btn').textContent=active?'Neptune Pro Active (Test)':'Get Neptune Pro';$('pro-buy-btn').disabled=active;$('pro-checkout').classList.toggle('hidden',active);$('user-badge').textContent=((state.user?.user||'ACCOUNT').toUpperCase())+(active?' · PRO':'')}
-function renderAccountManager(){const db=readJSON('nep_db',{});const linked=readJSON('nep_saved_accounts',[]).filter(x=>typeof x==='string');if(state.user&&!linked.some(x=>x.toLowerCase()===accountKey())){linked.push(state.user.user);neptuneStorage.setItem('nep_saved_accounts',JSON.stringify(linked))}const unique=[...new Map(linked.map(name=>[name.toLowerCase(),name])).values()];$('accounts-list').innerHTML=unique.length?unique.map(name=>{const key=name.toLowerCase(),account=db[key];if(!account)return '';const active=key===accountKey();const status=active?'Currently active':(account.pro?'Neptune Pro (test)':'Standard account');return `<div class="account-item"><div><strong>${escapeHTML(account.user)}</strong><small>${status}</small></div><button type="button" data-switch-account="${escapeHTML(key)}" ${active?'disabled':''}>${active?'Active':'Switch'}</button></div>`}).join(''):'<div class="empty-state">No linked accounts yet.</div>';renderProStatus()}
-function showHome(){ $('screen-splash').classList.add('hidden');$('screen-home').classList.remove('hidden');renderProStatus();renderAll(); }
-function activateAccount(account){state.user=account;neptuneStorage.setItem('nep_user',JSON.stringify(account));saveLinkedAccount(account);loadAccountData();showHome()}
-function signOut(){neptuneStorage.removeItem('nep_user');state.user=null;state.list=[];state.progress={};$('screen-home').classList.add('hidden');$('screen-splash').classList.remove('hidden');switchAuth('signin')}
-$('go-signup').addEventListener('click',()=>switchAuth('signup'));$('go-signin').addEventListener('click',()=>switchAuth('signin'));
-$('signup-form').addEventListener('submit',e=>{e.preventDefault();const user=$('up-user').value.trim(),pass=$('up-pass').value;if(user.length<2||pass.length<4){notify('Use a username and password with at least 4 characters.');return}const db=readJSON('nep_db',{});const key=user.toLowerCase();if(db[key]){notify('That username already exists.');return}db[key]={user,pass,pro:false};neptuneStorage.setItem('nep_db',JSON.stringify(db));activateAccount(db[key]);$('signup-form').reset();notify('Account created. All titles are available.');});
-$('login-form').addEventListener('submit',e=>{e.preventDefault();const user=$('in-user').value.trim(),pass=$('in-pass').value,db=readJSON('nep_db',{}),account=db[user.toLowerCase()];if(account&&account.pass===pass){activateAccount(account);notify('Welcome back.')}else notify('Username or password is incorrect.');});
-function cardHTML(item){const isSeries=item.type==='series';const img=item.img||(isSeries?GUMBALL_LOGO:'');const label=isSeries?`${item.episodes.length} EPISODES`:'MOVIE';const fallback=isSeries?(item.id==='gumball'?'GyQzh3iih4E':item.episodes[0]?.video):(item.video||'O1MSGBhXDOA');return `<article class="card" tabindex="0" role="button" aria-label="Open ${escapeHTML(item.title)}" data-open="${item.id}"><button class="card-play" aria-label="Play ${escapeHTML(item.title)}" data-open="${item.id}">▶</button><button class="btn-list-add" title="Add to My List" aria-label="Add ${escapeHTML(item.title)} to My List" data-add="${item.id}">${state.list.includes(item.id)?'✓':'+'}</button><img src="${img}" alt="${escapeHTML(item.title)}" loading="lazy" onerror="this.onerror=null;this.src='https://i.ytimg.com/vi/${fallback}/hqdefault.jpg'"><div class="card-info"><h3>${escapeHTML(item.title)}</h3><p>${label}</p></div></article>`}
-function renderShelf(targetId,items){const target=$(targetId);target.innerHTML=items.length?items.map(cardHTML).join(''):'<div class="empty-state">Nothing here yet. Add titles with the + button.</div>'}
-function renderAll(query=''){const q=query.trim().toLowerCase();const movies=MOVIES.filter(x=>x.title.toLowerCase().includes(q));const shows=SERIES.filter(x=>x.title.toLowerCase().includes(q)||x.episodes.some(e=>e.title.toLowerCase().includes(q)));renderShelf('movie-shelf',movies);renderShelf('main-shelf',shows);$('movie-count').textContent=`${movies.length} TITLES`;const row=$('my-list-row');if(!row.classList.contains('hidden'))renderShelf('list-shelf',ALL.filter(x=>state.list.includes(x.id)&&(!q||x.title.toLowerCase().includes(q))));$('no-results').classList.toggle('hidden',movies.length+shows.length>0);}
-let ytPlayer=null,ytApiReady=false,pendingVideo=null,currentContentId=null;
-window.onYouTubeIframeAPIReady=()=>{ytApiReady=true;if(pendingVideo)mountYouTubePlayer(pendingVideo)};
-function mountYouTubePlayer(video){if(!ytApiReady||!video){pendingVideo=video||pendingVideo;return}pendingVideo=null;if(ytPlayer){ytPlayer.destroy();ytPlayer=null}const parts=String(video).split('?start=');const videoId=parts[0],start=Number(parts[1]||0);const host=$('video-host');host.innerHTML='<div id="video-frame"></div>';ytPlayer=new YT.Player('video-frame',{width:'100%',height:'100%',videoId,playerVars:{autoplay:1,controls:1,rel:0,playsinline:1,start},events:{onStateChange:event=>{if(event.data===YT.PlayerState.ENDED)showEndRecommendations()}}})}
-function openPlayer(title,video,subtitle='',contentId=null){if(!video){notify('No video is available for this title.');return}if(ytPlayer){ytPlayer.destroy();ytPlayer=null}pendingVideo=video;currentContentId=contentId;$('player-heading').classList.remove('hidden');$('video-host').classList.remove('hidden');$('end-screen').classList.add('hidden');$('pb-title').textContent=title;$('pb-subtitle').textContent=subtitle||'Now playing';$('player-modal').classList.add('active');document.body.style.overflow='hidden';mountYouTubePlayer(video)}
-function showEndRecommendations(){if(!state.user)return;const candidates=ALL.filter(item=>item.id!==currentContentId||item.type==='series');const shows=candidates.filter(item=>item.type==='series');const movies=candidates.filter(item=>item.type!=='series');const shuffle=items=>{for(let i=items.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[items[i],items[j]]=[items[j],items[i]]}return items};const picks=shuffle([...shuffle(shows).slice(0,Math.min(2,shows.length)),...shuffle(movies).slice(0,3)]);$('recommendation-shelf').innerHTML=picks.map(cardHTML).join('');$('player-heading').classList.add('hidden');$('video-host').classList.add('hidden');$('end-screen').classList.remove('hidden')}
-function closeModal(id){$(id).classList.remove('active');if(!$('player-modal').classList.contains('active')&&!$('episodes-modal').classList.contains('active')&&!$('settings-modal').classList.contains('active'))document.body.style.overflow=''}
-function closePlayer(){pendingVideo=null;if(ytPlayer){ytPlayer.destroy();ytPlayer=null}$('video-host').innerHTML='<div id="video-frame"></div>';$('player-modal').classList.remove('active');$('end-screen').classList.add('hidden');$('player-heading').classList.remove('hidden');$('video-host').classList.remove('hidden');if(!$('episodes-modal').classList.contains('active')&&!$('settings-modal').classList.contains('active'))document.body.style.overflow=''}
-function playMovie(id){const movie=MOVIES.find(m=>m.id===id);if(movie)openPlayer(movie.title,movie.video,'Feature film · Full playback',id);}
-function openEpisodes(seriesId='gumball'){const series=SERIES.find(s=>s.id===seriesId);if(!series)return;$('ep-modal-title').textContent=series.title;$('ep-list-container').innerHTML=series.episodes.map((ep,i)=>`<div class="ep-row"><div><h4>${escapeHTML(ep.title)}</h4><span>Episode ${i+1}${series.creator?' · '+escapeHTML(series.creator):''}</span></div><button class="ep-play-btn" data-episode="${i}" data-series="${series.id}">PLAY</button></div>`).join('');$('episodes-modal').classList.add('active');document.body.style.overflow='hidden'}
-function playEpisode(index,seriesId='gumball'){const series=SERIES.find(s=>s.id===seriesId),ep=series?.episodes[index];if(!ep)return;state.progress[seriesId]=index;saveAccountProgress();closeModal('episodes-modal');const videoUrl=ep.start?`${ep.video}?start=${ep.start}`:ep.video;openPlayer(series.title,videoUrl,ep.title+(series.creator?' · '+series.creator:''),series.id)}
-function openTitle(id){const series=SERIES.find(s=>s.id===id);if(series){openEpisodes(id);return}playMovie(id)}
-function toggleList(id){if(state.list.includes(id))state.list=state.list.filter(x=>x!==id);else state.list.push(id);saveAccountList();renderAll($('search-input').value);notify(state.list.includes(id)?'Added to My List':'Removed from My List')}
-document.addEventListener('click',e=>{const switcher=e.target.closest('[data-switch-account]');if(switcher){const key=switcher.dataset.switchAccount,db=readJSON('nep_db',{}),account=db[key];if(account){activateAccount(account);closeModal('settings-modal');renderAccountManager();notify(`Switched to ${account.user}.`)}return}const add=e.target.closest('[data-add]');if(add){e.stopPropagation();toggleList(add.dataset.add);return}const episode=e.target.closest('[data-episode]');if(episode){playEpisode(Number(episode.dataset.episode),episode.dataset.series||'gumball');return}const open=e.target.closest('[data-open]');if(open){openTitle(open.dataset.open);return}});
-document.addEventListener('keydown',e=>{if(e.key==='Escape'){closePlayer();closeModal('episodes-modal');closeModal('settings-modal')}const card=e.target.closest?.('.card[data-open]');if(card&&(e.key==='Enter'||e.key===' ')){e.preventDefault();openTitle(card.dataset.open)}});
-$('hero-play').addEventListener('click',()=>playEpisode(state.progress.gumball??0,'gumball'));$('hero-episodes').addEventListener('click',()=>openEpisodes('gumball'));$('close-player').addEventListener('click',closePlayer);$('end-home').addEventListener('click',closePlayer);$('close-episodes').addEventListener('click',()=>closeModal('episodes-modal'));$('close-settings').addEventListener('click',()=>closeModal('settings-modal'));
-$('add-account-form').addEventListener('submit',e=>{e.preventDefault();const user=$('account-username').value.trim(),pass=$('account-password').value;if(user.length<2||pass.length<4){notify('Enter a username and password with at least 4 characters.');return}const db=readJSON('nep_db',{}),key=user.toLowerCase();let account=db[key];if(account){if(account.pass!==pass){notify('That username exists, but the password is incorrect.');return}}else{account={user,pass,pro:false};db[key]=account;neptuneStorage.setItem('nep_db',JSON.stringify(db))}activateAccount(account);$('add-account-form').reset();renderAccountManager();notify(account.pro?'Switched account. Neptune Pro is active (test mode).':'Account added and switched.');});
-$('pro-buy-btn').addEventListener('click',()=>{if(!state.user){notify('Sign in first.');return}$('pro-checkout').classList.remove('hidden')});
-$('pro-activate-btn').addEventListener('click',()=>{if(!state.user){notify('Sign in first.');return}const db=readJSON('nep_db',{}),key=accountKey();if(!db[key]){notify('Could not find this local account.');return}db[key].pro=true;neptuneStorage.setItem('nep_db',JSON.stringify(db));state.user=db[key];neptuneStorage.setItem('nep_user',JSON.stringify(state.user));renderAccountManager();notify('Neptune Pro activated in test mode. No payment was taken.');});
-$('search-input').addEventListener('input',e=>renderAll(e.target.value));$('my-list-link').addEventListener('click',()=>{ $('my-list-row').classList.remove('hidden');renderAll($('search-input').value);setTimeout(()=>$('my-list-row').scrollIntoView({behavior:'smooth',block:'start'}),0)});function openSettings(){renderAccountManager();$('settings-modal').classList.add('active');$('wall-input').value=neptuneStorage.getItem('nep_wall')||'';document.body.style.overflow='hidden'}$('settings-link').addEventListener('click',e=>{e.preventDefault();openSettings()});$('accounts-link').addEventListener('click',e=>{e.preventDefault();openSettings();setTimeout(()=>$('accounts-heading').scrollIntoView({behavior:'smooth',block:'start'}),0)});$('logout-link').addEventListener('click',e=>{e.preventDefault();signOut()});
-$('apply-wall').addEventListener('click',()=>{const url=$('wall-input').value.trim();if(url&&!/^https?:\/\//i.test(url)){notify('Enter a valid http or https image URL.');return}if(url){$('global-bg').style.backgroundImage=`url("${url.replace(/["\\]/g,'')}")`;neptuneStorage.setItem('nep_wall',url);notify('Wallpaper updated.')}else notify('Paste a wallpaper URL first.')});$('clear-wall').addEventListener('click',()=>{neptuneStorage.removeItem('nep_wall');$('global-bg').style.backgroundImage='';$('wall-input').value='';notify('Wallpaper reset.')});
-window.addEventListener('scroll',()=>$('navbar')?.classList.toggle('scrolled',window.scrollY>50));
-const savedWall=neptuneStorage.getItem('nep_wall');if(savedWall)$('global-bg').style.backgroundImage=`url("${savedWall.replace(/["\\]/g,'')}")`;
-if(state.user){saveLinkedAccount(state.user);loadAccountData();showHome();}
+
+renderSites();
 </script>
-<script async src="https://www.youtube.com/iframe_api"></script>
+
 </body>
 </html>
