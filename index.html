@@ -1,25 +1,884 @@
-
-<div class="family-guy-player">
-  <iframe
-    src="https://vidsrc.to/embed/tv/tt0182576"
-    title="Family Guy"
-    allowfullscreen
-    loading="lazy">
-  </iframe>
-</div>
-
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#090d12">
+<title>GitHub.global — The Global Pixel Canvas</title>
 <style>
-.family-guy-player {
-  width: 100%;
-  aspect-ratio: 16 / 9;
-  background: #050505;
-  border-radius: 12px;
-  overflow: hidden;
-}
-
-.family-guy-player iframe {
-  width: 100%;
-  height: 100%;
-  border: none;
-}
+  :root {
+    color-scheme: dark;
+    --bg: #090d12;
+    --panel: #111821;
+    --panel-2: #151f2a;
+    --line: #263341;
+    --muted: #8997a6;
+    --text: #e8eef5;
+    --green: #4ade80;
+    --blue: #60a5fa;
+    --radius: 13px;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    min-height: 100vh;
+    background: radial-gradient(ellipse at 50% -20%, #182635 0%, var(--bg) 55%);
+    color: var(--text);
+    font: 14px/1.45 Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  }
+  button, input, textarea { font: inherit; }
+  button { cursor: pointer; }
+  .topbar {
+    height: 70px;
+    padding: 0 25px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid #1d2935;
+    background: rgba(8, 12, 17, .88);
+    backdrop-filter: blur(12px);
+    position: sticky;
+    top: 0;
+    z-index: 10;
+  }
+  .brand { display: flex; align-items: center; gap: 12px; min-width: 0; }
+  .brand-mark {
+    width: 43px; height: 43px; padding: 5px;
+    display: grid; grid-template-columns: repeat(11, 1fr); grid-template-rows: repeat(11, 1fr);
+    gap: 1px; border-radius: 10px; background: #202b36; flex: 0 0 auto;
+    box-shadow: inset 0 0 0 1px #344454;
+  }
+  .brand-mark i { background: transparent; }
+  .brand-mark i.on { background: #f1f5f9; }
+  .brand-name { font-size: 19px; font-weight: 760; letter-spacing: -.65px; white-space: nowrap; }
+  .brand-name span { color: #a7b5c3; font-weight: 500; }
+  .tagline { color: var(--muted); font-size: 11px; margin-top: 1px; }
+  .top-actions { display: flex; align-items: center; gap: 10px; }
+  .peer-pill, .network-pill {
+    display: flex; align-items: center; gap: 8px; padding: 8px 11px;
+    border: 1px solid var(--line); border-radius: 999px; background: #101821;
+    color: #c8d3df; font-size: 12px; white-space: nowrap;
+  }
+  .live-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--green); box-shadow: 0 0 10px #4ade8066; }
+  .live-dot.offline { background: #eab308; box-shadow: none; }
+  .peer-number { color: #fff; font-weight: 750; font-variant-numeric: tabular-nums; }
+  .btn {
+    border: 1px solid #344556; color: #e7eef6; background: #182330;
+    border-radius: 9px; padding: 9px 12px; font-weight: 650; transition: .15s ease;
+  }
+  .btn:hover { background: #223244; border-color: #52677c; }
+  .btn.primary { background: #1c7547; border-color: #268b58; color: #f2fff7; }
+  .btn.primary:hover { background: #238a54; }
+  .btn.small { font-size: 12px; padding: 7px 10px; }
+  .btn:disabled { opacity: .45; cursor: not-allowed; }
+  main { max-width: 1500px; margin: 0 auto; padding: 22px 24px 30px; }
+  .intro { display: flex; justify-content: space-between; align-items: end; gap: 18px; margin: 0 0 17px; }
+  .intro h1 { font-size: clamp(20px, 2.4vw, 27px); margin: 0 0 4px; letter-spacing: -.7px; }
+  .intro p { margin: 0; color: var(--muted); font-size: 13px; }
+  .intro-note { color: #9daab7; font-size: 11px; text-align: right; max-width: 290px; }
+  .workspace { display: grid; grid-template-columns: minmax(0, 1fr) 290px; gap: 17px; align-items: start; }
+  .panel { border: 1px solid var(--line); border-radius: var(--radius); background: linear-gradient(180deg, #131c26, #101720); box-shadow: 0 12px 40px #00000022; }
+  .canvas-panel { overflow: hidden; }
+  .panel-head { min-height: 51px; display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 10px 14px; border-bottom: 1px solid #25313d; }
+  .panel-heading { display: flex; align-items: center; gap: 9px; font-weight: 700; }
+  .earth-mark {
+    width: 25px; height: 25px; display: grid; grid-template-columns: repeat(9,1fr); grid-template-rows: repeat(9,1fr);
+    border-radius: 50%; overflow: hidden; border: 1px solid #456c8e; background: #0c4e85; padding: 2px;
+  }
+  .earth-mark i { background: transparent; }
+  .earth-mark i.land { background: #4ade80; }
+  .canvas-meta { color: var(--muted); font-size: 11px; font-variant-numeric: tabular-nums; }
+  .stage {
+    padding: 17px;
+    background-color: #0b1118;
+    background-image: radial-gradient(#293747 1px, transparent 1px);
+    background-size: 18px 18px;
+  }
+  .board-wrap {
+    position: relative; width: 100%; max-height: 68vh; aspect-ratio: 1.6;
+    margin: 0 auto; background: #fff; border: 1px solid #526171; border-radius: 5px;
+    overflow: hidden; box-shadow: 0 8px 28px #0008;
+  }
+  #board { width: 100%; height: 100%; display: block; image-rendering: pixelated; touch-action: none; cursor: crosshair; }
+  .board-coords { position: absolute; left: 9px; top: 8px; color: #202b36; background: #ffffffc9; border-radius: 4px; padding: 2px 5px; font: 10px ui-monospace, SFMono-Regular, monospace; pointer-events: none; }
+  .canvas-footer { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 10px 14px; color: var(--muted); font-size: 11px; border-top: 1px solid #25313d; }
+  .tool-row { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+  .selected-chip { width: 14px; height: 14px; border: 1px solid #ffffff88; border-radius: 4px; display: inline-block; vertical-align: -2px; }
+  .palette-panel { margin-top: 13px; padding: 13px 14px 14px; }
+  .palette-title { display: flex; justify-content: space-between; align-items: center; margin-bottom: 11px; }
+  .palette-title strong { font-size: 13px; }
+  .palette-title span { font-size: 11px; color: var(--muted); }
+  .palette { display: grid; grid-template-columns: repeat(16, minmax(0, 1fr)); gap: 6px; }
+  .swatch {
+    padding: 0; width: 100%; aspect-ratio: 1; border-radius: 6px; border: 1px solid #ffffff2a;
+    box-shadow: inset 0 0 0 1px #00000018; position: relative; min-width: 0;
+  }
+  .swatch:hover { transform: translateY(-2px); }
+  .swatch.selected { outline: 2px solid #f8fafc; outline-offset: 2px; z-index: 1; }
+  .side { display: flex; flex-direction: column; gap: 14px; }
+  .side-card { padding: 14px; }
+  .side-card h2 { font-size: 13px; margin: 0 0 11px; }
+  .network-status { display: flex; align-items: center; gap: 8px; color: #c8d5e1; font-size: 12px; margin-bottom: 10px; }
+  .status-dot { width: 8px; height: 8px; border-radius: 50%; background: #eab308; }
+  .status-dot.connected { background: var(--green); box-shadow: 0 0 10px #4ade8055; }
+  .network-copy { color: var(--muted); font-size: 11px; margin: 0 0 12px; }
+  .network-actions { display: flex; gap: 7px; flex-wrap: wrap; }
+  .divider { border: 0; border-top: 1px solid #293642; margin: 13px 0; }
+  .stat-line { display: flex; justify-content: space-between; color: var(--muted); font-size: 11px; padding: 3px 0; }
+  .stat-line b { color: #e4ebf2; font-weight: 650; }
+  .chat-card { padding: 0; overflow: hidden; min-height: 340px; display: flex; flex-direction: column; }
+  .chat-head { padding: 12px 14px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #293642; }
+  .chat-head strong { font-size: 13px; }
+  .chat-head span { color: var(--muted); font-size: 10px; }
+  #chatMessages { height: 255px; overflow-y: auto; padding: 12px; display: flex; flex-direction: column; gap: 10px; }
+  .chat-empty { color: #7f8d9c; font-size: 11px; text-align: center; margin: auto 10px; line-height: 1.6; }
+  .message { min-width: 0; overflow-wrap: anywhere; }
+  .message-top { display: flex; align-items: baseline; gap: 7px; margin-bottom: 2px; }
+  .message-name { font-size: 10px; color: #83b6ee; font-weight: 750; }
+  .message-name.self { color: #76d99a; }
+  .message-time { color: #6f7d8b; font-size: 9px; }
+  .message-body { color: #d6dee7; font-size: 11px; line-height: 1.45; }
+  .chat-compose { padding: 10px; border-top: 1px solid #293642; display: flex; gap: 7px; }
+  .chat-compose input { min-width: 0; width: 100%; border: 1px solid #344556; background: #0b121a; color: var(--text); border-radius: 8px; padding: 9px 10px; outline: none; font-size: 11px; }
+  .chat-compose input:focus, textarea:focus { border-color: #4b8bc7; box-shadow: 0 0 0 2px #3b82f622; }
+  .chat-compose button { flex: 0 0 auto; width: 36px; padding: 0; border: 1px solid #287c50; background: #1b7447; color: white; border-radius: 8px; font-size: 17px; }
+  .fineprint { color: #72808e; font-size: 10px; line-height: 1.55; margin: 0; }
+  .footer { text-align: center; color: #667585; font-size: 10px; padding: 21px 8px 5px; }
+  .modal-backdrop { position: fixed; inset: 0; display: grid; place-items: center; padding: 18px; background: #03070bd9; z-index: 30; }
+  .modal-backdrop.hidden { display: none; }
+  .modal { width: min(560px, 100%); max-height: 90vh; overflow: auto; border: 1px solid #344556; border-radius: 15px; background: #111a24; box-shadow: 0 22px 90px #000b; }
+  .modal-head { display: flex; align-items: center; justify-content: space-between; padding: 15px 17px; border-bottom: 1px solid #293642; }
+  .modal-head h2 { font-size: 16px; margin: 0; }
+  .close-btn { border: 0; background: transparent; color: #9aa8b6; font-size: 23px; line-height: 1; }
+  .modal-body { padding: 16px 17px 18px; }
+  .tabs { display: flex; gap: 7px; padding: 4px; border: 1px solid #2a3948; border-radius: 9px; background: #0a1118; margin-bottom: 15px; }
+  .tab { flex: 1; border: 0; border-radius: 6px; padding: 8px; background: transparent; color: #9eabb8; font-size: 12px; }
+  .tab.active { background: #263747; color: #fff; }
+  .tab-pane.hidden { display: none; }
+  .field-label { display: block; color: #d7e0e9; font-size: 11px; font-weight: 700; margin: 12px 0 6px; }
+  textarea { width: 100%; min-height: 94px; resize: vertical; border: 1px solid #344556; background: #090f16; color: #dbe6f1; border-radius: 8px; padding: 9px; outline: none; font: 10px/1.4 ui-monospace, SFMono-Regular, Menlo, monospace; }
+  .modal-help { color: #91a0af; font-size: 11px; margin: 0 0 9px; line-height: 1.6; }
+  .modal-row { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 9px; }
+  .modal-feedback { font-size: 11px; color: #8fdba8; min-height: 16px; margin-top: 8px; }
+  .notice { border: 1px solid #5e4e26; background: #251f12; color: #e8d7a5; padding: 10px 11px; border-radius: 8px; font-size: 10px; line-height: 1.55; margin-top: 13px; }
+  @media (max-width: 980px) {
+    .workspace { grid-template-columns: minmax(0, 1fr) 260px; }
+    .palette { grid-template-columns: repeat(12, minmax(0, 1fr)); }
+  }
+  @media (max-width: 760px) {
+    .topbar { padding: 0 13px; height: 62px; }
+    .brand-name { font-size: 16px; }
+    .tagline { display: none; }
+    .peer-pill { padding: 7px 9px; }
+    .top-actions .network-pill { display: none; }
+    main { padding: 16px 12px 24px; }
+    .intro { align-items: start; flex-direction: column; gap: 5px; }
+    .intro-note { text-align: left; max-width: none; }
+    .workspace { grid-template-columns: 1fr; }
+    .board-wrap { max-height: 60vh; }
+    .stage { padding: 8px; }
+    .palette { grid-template-columns: repeat(10, minmax(0, 1fr)); gap: 7px; }
+    .side { display: grid; grid-template-columns: 1fr; }
+    .chat-card { min-height: 270px; }
+    #chatMessages { height: 190px; }
+    .canvas-footer { align-items: flex-start; flex-direction: column; }
+  }
 </style>
+</head>
+<body>
+<header class="topbar">
+  <div class="brand">
+    <div class="brand-mark" id="githubMark" aria-hidden="true"></div>
+    <div>
+      <div class="brand-name">GitHub<span>.global</span></div>
+      <div class="tagline">one world. one canvas.</div>
+    </div>
+  </div>
+  <div class="top-actions">
+    <div class="network-pill"><span class="live-dot"></span><span id="topNetworkText">AUTO-DISCOVERY</span></div>
+    <div class="peer-pill"><span class="peer-number" id="peerCount">1</span><span>here now</span></div>
+  </div>
+</header>
+
+<main>
+  <section class="intro">
+    <div>
+      <h1>A canvas for everyone.</h1>
+      <p>Every tile is a contribution. Draw a pixel and leave your mark.</p>
+    </div>
+    <div class="intro-note">Your canvas saves on this device automatically.</div>
+  </section>
+
+  <div class="workspace">
+    <section class="canvas-column">
+      <div class="panel canvas-panel">
+        <div class="panel-head">
+          <div class="panel-heading"><div class="earth-mark" id="earthMark" aria-hidden="true"></div> Global pixel canvas</div>
+          <div class="canvas-meta">128 × 80 · 10,240 pixels</div>
+        </div>
+        <div class="stage">
+          <div class="board-wrap">
+            <canvas id="board" width="128" height="80" aria-label="Shared pixel canvas"></canvas>
+            <div class="board-coords" id="coords">x: — &nbsp; y: —</div>
+          </div>
+        </div>
+        <div class="canvas-footer">
+          <div class="tool-row"><span class="selected-chip" id="selectedChip"></span><span id="selectedText">Selected: #ffffff</span><span>·</span><span>Click or drag to draw</span></div>
+          <div class="tool-row"><button class="btn small" id="eraseBtn">White pen</button><button class="btn small" id="gridBtn">Grid: on</button></div>
+        </div>
+      </div>
+
+      <div class="panel palette-panel">
+        <div class="palette-title"><strong>Color palette</strong><span>48 colors · choose one to paint</span></div>
+        <div class="palette" id="palette"></div>
+      </div>
+    </section>
+
+    <aside class="side">
+      <section class="panel side-card">
+        <h2>Peer network</h2>
+        <div class="network-status"><span class="status-dot" id="sideStatusDot"></span><span id="sideStatus">Connecting to the global network…</span></div>
+        <p class="network-copy">GitHub.global quietly discovers other open browsers and creates peer links in the background. No invite codes or manual pairing.</p>
+        <div class="network-actions"><button class="btn small" id="peerInfo">Network details</button></div>
+        <hr class="divider">
+        <div class="stat-line"><span>Direct connections</span><b id="directPeers">0</b></div>
+        <div class="stat-line"><span>Canvas storage</span><b>On this device</b></div>
+        <div class="stat-line"><span>Canvas size</span><b>10,240 pixels</b></div>
+      </section>
+
+      <section class="panel chat-card">
+        <div class="chat-head"><strong>Global chat</strong><span id="chatStatus">connecting…</span></div>
+        <div id="chatMessages"><div class="chat-empty">Joining the global network…<br>Chat will appear here when visitors are connected.</div></div>
+        <form class="chat-compose" id="chatForm">
+          <input id="chatInput" maxlength="240" autocomplete="off" placeholder="Say something…" aria-label="Chat message">
+          <button type="submit" aria-label="Send message">↑</button>
+        </form>
+      </section>
+      <section class="panel side-card">
+        <h2>About this canvas</h2>
+        <p class="fineprint">Pixels and chat travel directly between browsers over peer-to-peer links. A lightweight signaling room is used only to discover visitors and set up those links. Direct connections form a relay ring to avoid a full-mesh connection explosion. This browser saves its own copy; if every visitor closes the site, there is no always-on machine holding a global copy. There is no report button or content moderation.</p>
+      </section>
+    </aside>
+  </div>
+  <div class="footer">GitHub.global is an independent fan-made canvas concept and is not affiliated with GitHub, Inc.</div>
+</main>
+
+<script>
+(() => {
+  'use strict';
+
+  const WIDTH = 128;
+  const HEIGHT = 80;
+  const PIXELS = WIDTH * HEIGHT;
+  const PALETTE = [
+    '#ffffff','#e4e4e4','#888888','#222222','#000000','#f5a623','#ffcc4d','#fff2a6',
+    '#ff6b6b','#e03131','#9b2226','#ff9fba','#ff62a5','#c9184a','#ff7f50','#e85d04',
+    '#ffd6a5','#f4a261','#b5651d','#7f4f24','#f9c74f','#90be6d','#52b788','#2d6a4f',
+    '#b7e4c7','#00a878','#00c2a8','#2ec4b6','#80ffdb','#38bdf8','#0284c7','#075985',
+    '#a5d8ff','#4361ee','#3a0ca3','#7209b7','#b5179e','#e0aaff','#cdb4db','#9d8189',
+    '#f1c0e8','#f7cad0','#d8e2dc','#a8dadc','#457b9d','#1d3557','#8d99ae','#6c757d'
+  ];
+  const GITHUB_PIXELS = [
+    '00011011000','00111111100','01111111110','11111111111','11100100111',
+    '11000100011','11011111011','01111111110','00111111100','00011111000','00001110000'
+  ];
+  const EARTH_PIXELS = [
+    '000111000','001111100','011111110','111111110','111111100',
+    '011111110','001111100','000111000','000010000'
+  ];
+  const LAND_PIXELS = [
+    '000000000','000100000','001110000','001111000','000111000',
+    '000011100','000110000','000000000','000000000'
+  ];
+
+  const $ = id => document.getElementById(id);
+  const canvas = $('board');
+  const ctx = canvas && canvas.getContext ? canvas.getContext('2d', { alpha: false }) : null;
+  if (!ctx) { console.error('GitHub.global: canvas rendering is unavailable in this preview.'); }
+  const colors = new Uint8Array(PIXELS);
+  const stamps = new Float64Array(PIXELS);
+  let selectedColor = 0;
+  let showGrid = true;
+  let drawing = false;
+  let previousCell = null;
+  let db = null;
+  let signalSocket = null;
+  let signalReady = false;
+  let reconnectTimer = null;
+  let peerWatchTimer = null;
+  let announceTimer = null;
+  let knownPeers = new Set();
+  let messageCounter = 0;
+  const peers = new Map();
+  const seenMessageIds = new Set();
+  const seenQueue = [];
+  const makeId = () => (window.crypto && typeof window.crypto.randomUUID === 'function' ? window.crypto.randomUUID() : Math.random().toString(36).slice(2) + Date.now().toString(36)).replace(/-/g, '').slice(0, 16);
+  const clientId = makeId();
+  const localName = 'guest-' + clientId.slice(0, 5);
+  const chatHistory = [];
+
+  function buildPixelMark(target, matrix, className) {
+    target.innerHTML = '';
+    matrix.forEach((row, y) => [...row].forEach((bit, x) => {
+      const cell = document.createElement('i');
+      if (bit === '1') cell.className = className;
+      if (target.id === 'earthMark' && LAND_PIXELS[y] && LAND_PIXELS[y][x] === '1') cell.className = 'land';
+      target.appendChild(cell);
+    }));
+  }
+  buildPixelMark($('githubMark'), GITHUB_PIXELS, 'on');
+  buildPixelMark($('earthMark'), EARTH_PIXELS, 'land');
+
+  function hexRgb(hex) {
+    return [parseInt(hex.slice(1,3),16), parseInt(hex.slice(3,5),16), parseInt(hex.slice(5,7),16)];
+  }
+  const paletteRgb = PALETTE.map(hexRgb);
+
+  function renderBoard() {
+    if (!ctx) return;
+    const frame = ctx.createImageData(WIDTH, HEIGHT);
+    for (let i = 0; i < PIXELS; i++) {
+      const rgb = paletteRgb[colors[i]] || paletteRgb[0];
+      const j = i * 4;
+      frame.data[j] = rgb[0]; frame.data[j+1] = rgb[1]; frame.data[j+2] = rgb[2]; frame.data[j+3] = 255;
+    }
+    ctx.putImageData(frame, 0, 0);
+    if (showGrid) {
+      ctx.save();
+      ctx.strokeStyle = 'rgba(20, 32, 45, .26)';
+      ctx.lineWidth = .08;
+      for (let x = 8; x < WIDTH; x += 8) { ctx.beginPath(); ctx.moveTo(x + .5, 0); ctx.lineTo(x + .5, HEIGHT); ctx.stroke(); }
+      for (let y = 8; y < HEIGHT; y += 8) { ctx.beginPath(); ctx.moveTo(0, y + .5); ctx.lineTo(WIDTH, y + .5); ctx.stroke(); }
+      ctx.restore();
+    }
+  }
+
+  function openDatabase() {
+    return new Promise((resolve, reject) => {
+      if (!('indexedDB' in window)) return reject(new Error('IndexedDB unavailable'));
+      const request = indexedDB.open('github-global-canvas', 1);
+      request.onupgradeneeded = () => {
+        const database = request.result;
+        if (!database.objectStoreNames.contains('state')) database.createObjectStore('state');
+      };
+      request.onsuccess = () => resolve(request.result);
+      request.onerror = () => reject(request.error || new Error('Could not open local storage'));
+    });
+  }
+  function bytesToBase64(buffer) {
+    const bytes = new Uint8Array(buffer);
+    let binary = '';
+    const step = 0x8000;
+    for (let i = 0; i < bytes.length; i += step) binary += String.fromCharCode(...bytes.subarray(i, i + step));
+    return btoa(binary);
+  }
+  function base64ToBytes(value, Type) {
+    const binary = atob(value);
+    const bytes = new Uint8Array(binary.length);
+    for (let i = 0; i < binary.length; i++) bytes[i] = binary.charCodeAt(i);
+    return new Type(bytes.buffer);
+  }
+  function currentSnapshot() {
+    return { t: 'snapshot', width: WIDTH, height: HEIGHT, colors: bytesToBase64(colors.buffer), stamps: bytesToBase64(stamps.buffer) };
+  }
+  function saveBoard() {
+    const record = { colors: bytesToBase64(colors.buffer), stamps: bytesToBase64(stamps.buffer) };
+    try { localStorage.setItem('github-global-canvas-fallback', JSON.stringify(record)); } catch (_) {}
+    if (!db) return;
+    try {
+      const tx = db.transaction('state', 'readwrite');
+      tx.objectStore('state').put(record, 'canvas');
+    } catch (_) {}
+  }
+  let saveTimer = null;
+  function scheduleSave() {
+    clearTimeout(saveTimer);
+    saveTimer = setTimeout(saveBoard, 220);
+  }
+  async function loadBoard() {
+    try {
+      db = await openDatabase();
+      const record = await new Promise((resolve, reject) => {
+        const tx = db.transaction('state', 'readonly');
+        const req = tx.objectStore('state').get('canvas');
+        req.onsuccess = () => resolve(req.result || null);
+        req.onerror = () => reject(req.error);
+      });
+      if (record) applyStoredBoard(record);
+      else {
+        const fallback = localStorage.getItem('github-global-canvas-fallback');
+        if (fallback) applyStoredBoard(JSON.parse(fallback));
+      }
+    } catch (error) {
+      try {
+        const fallback = localStorage.getItem('github-global-canvas-fallback');
+        if (fallback) applyStoredBoard(JSON.parse(fallback));
+      } catch (_) {}
+    }
+    renderBoard();
+  }
+  function applyStoredBoard(record) {
+    if (!record || !record.colors || !record.stamps) return;
+    try {
+      const savedColors = base64ToBytes(record.colors, Uint8Array);
+      const savedStamps = base64ToBytes(record.stamps, Float64Array);
+      if (savedColors.length === PIXELS && savedStamps.length === PIXELS) {
+        colors.set(savedColors); stamps.set(savedStamps);
+      }
+    } catch (_) {}
+  }
+
+  function drawPalette() {
+    const root = $('palette');
+    root.innerHTML = '';
+    PALETTE.forEach((color, index) => {
+      const button = document.createElement('button');
+      button.type = 'button';
+      button.className = 'swatch' + (index === selectedColor ? ' selected' : '');
+      button.style.background = color;
+      button.title = color;
+      button.setAttribute('aria-label', 'Select ' + color);
+      button.addEventListener('click', () => selectColor(index));
+      root.appendChild(button);
+    });
+    updateSelectedColor();
+  }
+  function selectColor(index) {
+    selectedColor = index;
+    [...$('palette').children].forEach((button, i) => button.classList.toggle('selected', i === index));
+    updateSelectedColor();
+  }
+  function updateSelectedColor() {
+    $('selectedChip').style.background = PALETTE[selectedColor];
+    $('selectedText').textContent = 'Selected: ' + PALETTE[selectedColor];
+    $('eraseBtn').textContent = selectedColor === 0 ? 'White pen selected' : 'White pen';
+  }
+
+  function rememberId(id) {
+    if (!id || seenMessageIds.has(id)) return false;
+    seenMessageIds.add(id); seenQueue.push(id);
+    if (seenQueue.length > 25000) seenMessageIds.delete(seenQueue.shift());
+    return true;
+  }
+  function peerSend(peer, payload) {
+    if (peer && peer.dc && peer.dc.readyState === 'open') {
+      try { peer.dc.send(typeof payload === 'string' ? payload : JSON.stringify(payload)); } catch (_) {}
+    }
+  }
+  function broadcast(payload, exceptPeerId = null) {
+    for (const [id, peer] of peers) if (id !== exceptPeerId) peerSend(peer, payload);
+  }
+  function pixelEvent(x, y, colorIndex) {
+    const index = y * WIDTH + x;
+    const stamp = Math.max(Date.now(), stamps[index] + 0.01);
+    colors[index] = colorIndex;
+    stamps[index] = stamp;
+    const event = { t: 'pixel', id: clientId + ':' + (++messageCounter), x, y, c: colorIndex, s: stamp };
+    rememberId(event.id);
+    renderBoard();
+    scheduleSave();
+    broadcast(event);
+  }
+  function applySnapshot(snapshot) {
+    if (snapshot.width !== WIDTH || snapshot.height !== HEIGHT) return;
+    try {
+      const incomingColors = base64ToBytes(snapshot.colors, Uint8Array);
+      const incomingStamps = base64ToBytes(snapshot.stamps, Float64Array);
+      if (incomingColors.length !== PIXELS || incomingStamps.length !== PIXELS) return;
+      let changed = false;
+      for (let i = 0; i < PIXELS; i++) {
+        if (incomingStamps[i] > stamps[i]) {
+          stamps[i] = incomingStamps[i]; colors[i] = Math.min(incomingColors[i], PALETTE.length - 1); changed = true;
+        }
+      }
+      if (changed) { renderBoard(); scheduleSave(); }
+    } catch (_) {}
+  }
+
+  function cellFromPointer(event) {
+    const rect = canvas.getBoundingClientRect();
+    const x = Math.max(0, Math.min(WIDTH - 1, Math.floor((event.clientX - rect.left) / rect.width * WIDTH)));
+    const y = Math.max(0, Math.min(HEIGHT - 1, Math.floor((event.clientY - rect.top) / rect.height * HEIGHT)));
+    return { x, y };
+  }
+  function drawLine(from, to) {
+    let x0 = from.x, y0 = from.y;
+    const x1 = to.x, y1 = to.y;
+    const dx = Math.abs(x1 - x0), sx = x0 < x1 ? 1 : -1;
+    const dy = -Math.abs(y1 - y0), sy = y0 < y1 ? 1 : -1;
+    let err = dx + dy;
+    while (true) {
+      pixelEvent(x0, y0, selectedColor);
+      if (x0 === x1 && y0 === y1) break;
+      const e2 = 2 * err;
+      if (e2 >= dy) { err += dy; x0 += sx; }
+      if (e2 <= dx) { err += dx; y0 += sy; }
+    }
+  }
+  canvas.addEventListener('pointerdown', event => {
+    event.preventDefault(); drawing = true; canvas.setPointerCapture(event.pointerId);
+    previousCell = cellFromPointer(event); drawLine(previousCell, previousCell);
+  });
+  canvas.addEventListener('pointermove', event => {
+    const rect = canvas.getBoundingClientRect();
+    if (event.clientX >= rect.left && event.clientX <= rect.right && event.clientY >= rect.top && event.clientY <= rect.bottom) {
+      const cell = cellFromPointer(event); $('coords').textContent = 'x: ' + cell.x + '   y: ' + cell.y;
+      if (drawing && previousCell && (cell.x !== previousCell.x || cell.y !== previousCell.y)) drawLine(previousCell, cell);
+      previousCell = cell;
+    }
+  });
+  function stopDrawing() { drawing = false; previousCell = null; }
+  canvas.addEventListener('pointerup', stopDrawing);
+  canvas.addEventListener('pointercancel', stopDrawing);
+  canvas.addEventListener('lostpointercapture', stopDrawing);
+  $('eraseBtn').addEventListener('click', () => selectColor(0));
+  $('gridBtn').addEventListener('click', () => { showGrid = !showGrid; $('gridBtn').textContent = 'Grid: ' + (showGrid ? 'on' : 'off'); renderBoard(); });
+
+  function addChatMessage(message, isSelf = false) {
+    const root = $('chatMessages');
+    const empty = root.querySelector('.chat-empty');
+    if (empty) empty.remove();
+    const item = document.createElement('div'); item.className = 'message';
+    const top = document.createElement('div'); top.className = 'message-top';
+    const name = document.createElement('span'); name.className = 'message-name' + (isSelf ? ' self' : ''); name.textContent = isSelf ? 'you' : String(message.who || 'guest');
+    const time = document.createElement('span'); time.className = 'message-time';
+    time.textContent = new Date(message.at || Date.now()).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    const body = document.createElement('div'); body.className = 'message-body'; body.textContent = String(message.body || '');
+    top.append(name, time); item.append(top, body); root.appendChild(item);
+    while (root.children.length > 90) root.firstElementChild.remove();
+    root.scrollTop = root.scrollHeight;
+  }
+  function saveChat() {
+    try { localStorage.setItem('github-global-chat', JSON.stringify(chatHistory.slice(-80))); } catch (_) {}
+  }
+  function loadChat() {
+    try {
+      const stored = JSON.parse(localStorage.getItem('github-global-chat') || '[]');
+      if (Array.isArray(stored)) stored.slice(-80).forEach(msg => { chatHistory.push(msg); addChatMessage(msg, msg.who === localName); });
+    } catch (_) {}
+  }
+  $('chatForm').addEventListener('submit', event => {
+    event.preventDefault();
+    const field = $('chatInput'); const body = field.value.trim().slice(0, 240);
+    if (!body) return;
+    const message = { t: 'chat', id: clientId + ':chat:' + (++messageCounter), who: localName, body, at: Date.now() };
+    rememberId(message.id); chatHistory.push(message); addChatMessage(message, true); saveChat(); broadcast(message); field.value = '';
+  });
+
+  // Automatic discovery/signaling follows Yapora's silent room-join pattern.
+  // The signaling socket only exchanges presence + WebRTC setup messages;
+  // pixels and chat are sent over direct WebRTC data channels.
+  const SIGNAL_URL = 'wss://wss.getlost.ovh';
+  const SIGNAL_ROOM = 'github-global-v1';
+  const ICE_CONFIG = {
+    iceServers: [
+      { urls: 'stun:stun.l.google.com:19302' },
+      { urls: 'stun:stun1.l.google.com:19302' }
+    ]
+  };
+  const tabPeerId = makeId();
+
+  function signalSend(packet) {
+    if (!signalSocket || signalSocket.readyState !== WebSocket.OPEN) return false;
+    try {
+      signalSocket.send(JSON.stringify({ roomId: SIGNAL_ROOM, ...packet }));
+      return true;
+    } catch (_) { return false; }
+  }
+
+  function updatePeerUI() {
+    const direct = [...peers.values()].filter(p => p.dc && p.dc.readyState === 'open').length;
+    const total = Math.max(1, knownPeers.size + 1);
+    $('peerCount').textContent = String(total);
+    $('directPeers').textContent = String(direct);
+    const connected = direct > 0;
+    $('sideStatusDot').classList.toggle('connected', signalReady || connected);
+    document.querySelector('.live-dot')?.classList.toggle('offline', !signalReady);
+    if (connected) $('sideStatus').textContent = direct + ' direct peer' + (direct === 1 ? '' : 's') + ' connected';
+    else if (signalReady) $('sideStatus').textContent = knownPeers.size ? 'Finding ' + knownPeers.size + ' visitor' + (knownPeers.size === 1 ? '' : 's') : 'Connected · waiting for visitors';
+    else $('sideStatus').textContent = 'Connecting to the global network…';
+    $('topNetworkText').textContent = connected ? 'P2P CONNECTED' : signalReady ? 'AUTO-DISCOVERY' : 'RECONNECTING';
+    $('chatStatus').textContent = connected ? 'global peer network' : signalReady ? 'waiting for visitors' : 'connecting…';
+  }
+
+  function sendSnapshot(peer) {
+    if (!peer?.dc || peer.dc.readyState !== 'open') return;
+    // Chunk the snapshot to keep individual data-channel messages small.
+    const chunkSize = 900;
+    const chunks = Math.ceil(PIXELS / chunkSize);
+    for (let part = 0; part < chunks; part++) {
+      const start = part * chunkSize;
+      const end = Math.min(PIXELS, start + chunkSize);
+      const colorView = colors.subarray(start, end);
+      const stampView = stamps.subarray(start, end);
+      peerSend(peer, {
+        t: 'snapshot-part', width: WIDTH, height: HEIGHT, part, chunks, start,
+        colors: bytesToBase64(colorView.buffer.slice(colorView.byteOffset, colorView.byteOffset + colorView.byteLength)),
+        stamps: bytesToBase64(stampView.buffer.slice(stampView.byteOffset, stampView.byteOffset + stampView.byteLength))
+      });
+    }
+  }
+
+  function applySnapshotPart(data) {
+    if (data.width !== WIDTH || data.height !== HEIGHT ||
+        !Number.isInteger(data.start) || data.start < 0 || data.start >= PIXELS ||
+        !Number.isInteger(data.part) || !Number.isInteger(data.chunks)) return;
+    try {
+      const incomingColors = base64ToBytes(data.colors, Uint8Array);
+      const incomingStamps = base64ToBytes(data.stamps, Float64Array);
+      if (incomingColors.length !== incomingStamps.length ||
+          data.start + incomingColors.length > PIXELS) return;
+      let changed = false;
+      for (let i = 0; i < incomingColors.length; i++) {
+        const index = data.start + i;
+        if (incomingStamps[i] > stamps[index]) {
+          stamps[index] = incomingStamps[i];
+          colors[index] = Math.min(incomingColors[i], PALETTE.length - 1);
+          changed = true;
+        }
+      }
+      if (changed) { renderBoard(); scheduleSave(); }
+    } catch (_) {}
+  }
+
+  function receivePeerData(raw, sourcePeerId) {
+    let data;
+    try { data = JSON.parse(raw); } catch (_) { return; }
+    if (data.t === 'snapshot-part') { applySnapshotPart(data); return; }
+    if (data.t === 'pixel') {
+      if (!rememberId(data.id)) return;
+      if (!Number.isInteger(data.x) || !Number.isInteger(data.y) || data.x < 0 || data.x >= WIDTH || data.y < 0 || data.y >= HEIGHT) return;
+      if (!Number.isInteger(data.c) || data.c < 0 || data.c >= PALETTE.length || !Number.isFinite(data.s)) return;
+      const index = data.y * WIDTH + data.x;
+      if (data.s > stamps[index]) { colors[index] = data.c; stamps[index] = data.s; renderBoard(); scheduleSave(); }
+      broadcast(data, sourcePeerId);
+      return;
+    }
+    if (data.t === 'chat') {
+      if (!rememberId(data.id) || typeof data.body !== 'string') return;
+      data.body = data.body.slice(0, 240); data.who = String(data.who || 'guest').slice(0, 24);
+      chatHistory.push(data); addChatMessage(data, false); saveChat(); broadcast(data, sourcePeerId);
+    }
+  }
+
+  function attachDataChannel(remoteId, peer, dc) {
+    if (peer.dc && peer.dc !== dc) {
+      try { peer.dc.close(); } catch (_) {}
+    }
+    peer.dc = dc;
+    dc.onopen = () => { updatePeerUI(); sendSnapshot(peer); };
+    dc.onmessage = event => receivePeerData(event.data, remoteId);
+    dc.onclose = () => {
+      if (peers.get(remoteId) === peer) {
+        try { peer.pc.close(); } catch (_) {}
+        peers.delete(remoteId);
+      }
+      updatePeerUI();
+    };
+    dc.onerror = () => updatePeerUI();
+    updatePeerUI();
+  }
+
+  function getPeer(remoteId) {
+    let peer = peers.get(remoteId);
+    if (peer) return peer;
+    if (!('RTCPeerConnection' in window)) throw new Error('This browser does not support peer connections.');
+    const pc = new RTCPeerConnection(ICE_CONFIG);
+    peer = { id: remoteId, pc, dc: null, pendingCandidates: [], createdAt: Date.now() };
+    peers.set(remoteId, peer);
+    pc.onicecandidate = event => {
+      if (event.candidate) signalSend({ to: remoteId, from: tabPeerId, type: 'candidate', candidate: event.candidate });
+    };
+    pc.ondatachannel = event => attachDataChannel(remoteId, peer, event.channel);
+    pc.onconnectionstatechange = () => {
+      if (['failed', 'closed', 'disconnected'].includes(pc.connectionState)) {
+        try { pc.close(); } catch (_) {}
+        peers.delete(remoteId);
+        updatePeerUI();
+      } else updatePeerUI();
+    };
+    return peer;
+  }
+
+  async function createPeerOffer(remoteId) {
+    if (!remoteId || remoteId === tabPeerId || peers.has(remoteId)) return;
+    const peer = getPeer(remoteId);
+    peer.dc = peer.pc.createDataChannel('github-global', { ordered: true });
+    attachDataChannel(remoteId, peer, peer.dc);
+    try {
+      const offer = await peer.pc.createOffer();
+      await peer.pc.setLocalDescription(offer);
+      signalSend({ to: remoteId, from: tabPeerId, type: 'offer', sdp: peer.pc.localDescription.sdp });
+    } catch (error) {
+      console.warn('GitHub.global peer offer failed:', error);
+      try { peer.pc.close(); } catch (_) {}
+      peers.delete(remoteId);
+      updatePeerUI();
+    }
+  }
+
+  function desiredPeerIds() {
+    const ids = [...knownPeers, tabPeerId].sort();
+    if (ids.length < 2) return [];
+    const index = ids.indexOf(tabPeerId);
+    const previous = ids[(index - 1 + ids.length) % ids.length];
+    const next = ids[(index + 1) % ids.length];
+    return [...new Set([previous, next].filter(id => id && id !== tabPeerId))];
+  }
+
+  function reconcilePeerMesh() {
+    const desired = new Set(desiredPeerIds());
+    // Keep a low-degree ring rather than opening a connection to every visitor.
+    // Pixel/chat messages are relayed around the ring and deduplicated by ID.
+    for (const [id, peer] of [...peers.entries()]) {
+      if (!desired.has(id)) {
+        try { peer.pc.close(); } catch (_) {}
+        peers.delete(id);
+      }
+    }
+    for (const id of desired) {
+      if (tabPeerId.localeCompare(id) < 0 && !peers.has(id)) createPeerOffer(id);
+    }
+    updatePeerUI();
+  }
+
+  async function handleSignal(data) {
+    if (!data || data.from === tabPeerId) return;
+    if (data.sys === 'roster' && Array.isArray(data.roster)) {
+      const next = new Set(data.roster.filter(id => typeof id === 'string' && id && id !== tabPeerId));
+      for (const oldId of knownPeers) {
+        if (!next.has(oldId)) {
+          const oldPeer = peers.get(oldId);
+          if (oldPeer) { try { oldPeer.pc.close(); } catch (_) {} peers.delete(oldId); }
+        }
+      }
+      knownPeers = next;
+      // Everyone derives the same ring from the same roster; only the lower ID initiates each link.
+      reconcilePeerMesh();
+      return;
+    }
+    if (!data.from) return;
+    if (data.type === 'offer') {
+      const peer = getPeer(data.from);
+      try {
+        if (peer.pc.signalingState !== 'stable') return;
+        await peer.pc.setRemoteDescription({ type: 'offer', sdp: data.sdp });
+        for (const candidate of peer.pendingCandidates.splice(0)) {
+          try { await peer.pc.addIceCandidate(candidate); } catch (_) {}
+        }
+        const answer = await peer.pc.createAnswer();
+        await peer.pc.setLocalDescription(answer);
+        signalSend({ to: data.from, from: tabPeerId, type: 'answer', sdp: peer.pc.localDescription.sdp });
+      } catch (error) {
+        console.warn('GitHub.global offer handling failed:', error);
+        try { peer.pc.close(); } catch (_) {}
+        peers.delete(data.from);
+        updatePeerUI();
+      }
+      return;
+    }
+    if (data.type === 'answer') {
+      const peer = peers.get(data.from);
+      if (!peer || peer.pc.signalingState !== 'have-local-offer') return;
+      try {
+        await peer.pc.setRemoteDescription({ type: 'answer', sdp: data.sdp });
+        for (const candidate of peer.pendingCandidates.splice(0)) {
+          try { await peer.pc.addIceCandidate(candidate); } catch (_) {}
+        }
+      } catch (error) { console.warn('GitHub.global answer handling failed:', error); }
+      return;
+    }
+    if (data.type === 'candidate' && data.candidate) {
+      const peer = peers.get(data.from);
+      if (!peer) return;
+      if (peer.pc.remoteDescription) {
+        try { await peer.pc.addIceCandidate(data.candidate); } catch (_) {}
+      } else if (peer.pendingCandidates.length < 80) peer.pendingCandidates.push(data.candidate);
+    }
+  }
+
+  function closeAllPeers() {
+    for (const peer of peers.values()) { try { peer.pc.close(); } catch (_) {} }
+    peers.clear();
+    knownPeers.clear();
+    updatePeerUI();
+  }
+
+  function connectGlobalNetwork() {
+    if (typeof WebSocket !== 'function' || navigator.onLine === false) {
+      signalReady = false; updatePeerUI(); return;
+    }
+    if (signalSocket && [WebSocket.CONNECTING, WebSocket.OPEN].includes(signalSocket.readyState)) return;
+    try {
+      const socket = new WebSocket(SIGNAL_URL);
+      signalSocket = socket;
+      socket.onopen = () => {
+        if (signalSocket !== socket) return;
+        signalReady = true;
+        signalSend({ from: tabPeerId, announce: true });
+        updatePeerUI();
+        if (peerWatchTimer) clearInterval(peerWatchTimer);
+        peerWatchTimer = setInterval(() => {
+          if (signalSocket !== socket || socket.readyState !== WebSocket.OPEN) return;
+          reconcilePeerMesh();
+        }, 2500);
+        if (announceTimer) clearInterval(announceTimer);
+        announceTimer = setInterval(() => {
+          if (signalSocket === socket && socket.readyState === WebSocket.OPEN) {
+            // Refresh presence so a reconnecting browser can be rediscovered.
+            signalSend({ from: tabPeerId, announce: true });
+          }
+        }, 20000);
+      };
+      socket.onmessage = event => {
+        if (signalSocket !== socket) return;
+        let message;
+        try { message = JSON.parse(event.data); } catch (_) { return; }
+        handleSignal(message).catch(error => console.warn('GitHub.global signaling error:', error));
+      };
+      socket.onerror = () => { if (signalSocket === socket) { signalReady = false; updatePeerUI(); } };
+      socket.onclose = () => {
+        if (signalSocket !== socket) return;
+        signalSocket = null; signalReady = false;
+        if (peerWatchTimer) { clearInterval(peerWatchTimer); peerWatchTimer = null; }
+        if (announceTimer) { clearInterval(announceTimer); announceTimer = null; }
+        closeAllPeers();
+        if (reconnectTimer) clearTimeout(reconnectTimer);
+        reconnectTimer = setTimeout(() => { reconnectTimer = null; connectGlobalNetwork(); }, 2500);
+      };
+    } catch (error) {
+      signalReady = false; updatePeerUI();
+      if (reconnectTimer) clearTimeout(reconnectTimer);
+      reconnectTimer = setTimeout(() => { reconnectTimer = null; connectGlobalNetwork(); }, 3500);
+    }
+  }
+
+  window.addEventListener('online', connectGlobalNetwork);
+  window.addEventListener('offline', () => { signalReady = false; updatePeerUI(); });
+  window.addEventListener('beforeunload', () => {
+    if (peerWatchTimer) clearInterval(peerWatchTimer);
+    if (announceTimer) clearInterval(announceTimer);
+    if (reconnectTimer) clearTimeout(reconnectTimer);
+    try { signalSocket?.close(); } catch (_) {}
+  });
+
+  $('peerInfo').addEventListener('click', () => {
+    const total = Math.max(1, knownPeers.size + 1);
+    const direct = [...peers.values()].filter(p => p.dc && p.dc.readyState === 'open').length;
+    alert('GitHub.global automatically joins the shared signaling room when this page opens. It discovers ' +
+      total + ' active browser(s) and negotiates WebRTC connections in the background. No one has to exchange codes. ' +
+      'Pixels and chat use direct peer data channels. The signaling service is needed for discovery and setup; it does not store the canvas. Direct links form a low-connection peer ring so updates can relay without every visitor connecting to every other visitor.');
+  });
+
+  // Render the complete interface immediately; storage/network are optional enhancements.
+  drawPalette(); loadChat(); renderBoard(); updatePeerUI();
+  // Some embedded previews restrict IndexedDB or WebSockets. Never let either block the canvas UI.
+  const storageLoad = Promise.race([loadBoard(), new Promise(resolve => setTimeout(resolve, 900))]);
+  storageLoad.catch(error => console.warn('Local canvas restore unavailable:', error)).finally(() => {
+    if (typeof WebSocket === 'function' && navigator.onLine !== false) connectGlobalNetwork();
+    else { $('sideStatus').textContent = 'Preview mode · local canvas'; $('topNetworkText').textContent = 'LOCAL PREVIEW'; }
+  });
+})();
+</script>
+</body>
+</html>
